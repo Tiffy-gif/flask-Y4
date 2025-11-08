@@ -1,0 +1,293 @@
+{% extends 'master.html' %}
+{% block styleBlock %}
+    <title>About Us</title>
+	<style>
+        /* Hero section */
+        .about-hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            margin-top: 150px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            color: white;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .hero-content p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* About content */
+        .about-content {
+            padding: 80px 0;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            font-size: 36px;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .about-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s;
+        }
+
+        .about-image:hover img {
+            transform: scale(1.03);
+        }
+
+        /* Team section */
+        .team-section {
+            background-color: #fff;
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: #7f8c8d;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .divider {
+            height: 2px;
+            background-color: #e0e0e0;
+            width: 100px;
+            margin: 30px auto;
+        }
+
+        .team-member {
+            display: inline-block;
+            text-align: center;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .member-image {
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .member-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .team-member:hover .member-image img {
+            transform: scale(1.1);
+        }
+
+        .member-info {
+            padding: 25px;
+        }
+
+        .member-info h3 {
+            font-size: 20px;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .member-info p {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        /* Values section */
+        .values-section {
+            padding: 80px 0;
+            background-color: #f8f8f8;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .value-card {
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .value-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .value-icon {
+            font-size: 40px;
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+
+        .value-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .value-card p {
+            color: #7f8c8d;
+        }
+
+        /* Responsive design */
+        @media (max-width: 992px) {
+            .about-grid, .values-grid{
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .team-member {
+                max-width: 350px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .about-grid, .values-grid{
+                grid-template-columns: 1fr;
+            }
+
+            .hero-content h1 {
+                font-size: 36px;
+            }
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <section class="contact-us container">
+        <section class="about-hero">
+        <div class="hero-content">
+            <h1>ABOUT US</h1>
+            <p>Discover the story behind NIKE and our passion for creativity</p>
+        </div>
+        </section>
+
+        <!-- About Content -->
+        <section class="about-content">
+            <div class="container">
+                <div class="about-grid">
+                    <div class="about-text">
+                        <h2>Our Story</h2>
+                        <h3>JUST DO IT.</h3>
+                        <p>Surfside was born from a single premise: that creativity is a force of nature. in 2015, a few friends decided to stop talking and start building. they had a vision—to smash the boundaries between art and innovation.</p>
+                        <p>Our name comes from the edge of the continent, where the land ends and everything else begins. it’s a mindset. a constant reminder that true inspiration isn't found in boardrooms, but in the raw, unfiltered energy of the world.</p>
+                        <p>Today, we are a collective of designers, coders, storytellers, and strategists. but above all, we are athletes of the imagination. we don't follow trends. we set the pace. we are here to create the icons of tomorrow, to elevate brands that dare to dream faster, push harder, and aim higher.</p>
+                        <p>NIKE. forged in the tide.</p>
+                    </div>
+                    <div class="about-image">
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Our team working together">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section class="team-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Meet Our Team</h2>
+                    <p>The creative minds behind everything we do at NIKE</p>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="/static/assets/images/pic.jpg" alt="Team Member">
+                    </div>
+                    <div class="member-info">
+                        <h3>Vong David</h3>
+                        <p>Owner</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Values Section -->
+        <section class="values-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Our Values</h2>
+                    <p>The principles that guide everything we create</p>
+                </div>
+                <div class="values-grid">
+                    <div class="value-card">
+                        <div class="value-icon">💡</div>
+                        <h3>Innovation</h3>
+                        <p>We constantly explore new ideas and approaches to stay at the forefront of our industry.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">❤️</div>
+                        <h3>Passion</h3>
+                        <p>We genuinely love what we do, and that enthusiasm shows in every project we undertake.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">🤝</div>
+                        <h3>Collaboration</h3>
+                        <p>We believe the best results come from working closely with our clients and each other.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+{% endblock %}

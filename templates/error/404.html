@@ -1,0 +1,32 @@
+{% extends 'master.html' %}
+{% block styleBlock %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>404 Page Not Found</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+	<div class="relative w-full max-w-4xl mx-auto px-4 py-8 text-center flex flex-col items-center">
+
+        <div class="relative w-full h-96 sm:h-[400px] my-10 z-10">
+            <img src="https://cdn.dribbble.com/userupload/20420676/file/original-aac8f7f838812fa53cd92617fad5f892.gif" alt="Lost Caveman GIF" class="max-w-full h-98 object-contain mx-auto rounded-lg" />
+
+            <div class="absolute top-9 left-1/2 -translate-x-1/2 text-[15rem] sm:text-[8rem] font-extrabold text-black opacity-60 z-20">
+                404
+            </div>
+        </div>
+
+        <div class="relative z-20" style="margin-bottom: 90px">
+            <h1 class="text-5xl sm:text-6xl font-semibold mb-2">Look like you're lost</h1>
+            <p class="text-lg text-gray-500 mb-8">The page you are looking for is not available!</p>
+
+            <a href="/" class="inline-block px-8 py-3 text-white bg-green-500 rounded-lg shadow-md hover:bg-green-600 transition-colors duration-200">
+                Go to Home
+            </a>
+        </div>
+    </div>
+{% endblock %}

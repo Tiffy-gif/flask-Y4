@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Sent Successfully</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e3e8f0 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            width: 100%;
+            max-width: 650px;
+            overflow: hidden;
+            text-align: center;
+            padding: 40px 30px;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background-color: #34a853;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            animation: scaleUp 0.5s ease-out;
+        }
+
+        .success-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+
+        h1 {
+            color: #34a853;
+            margin-bottom: 15px;
+            font-size: 32px;
+            font-weight: 600;
+        }
+
+        .success-message {
+            color: #5f6368;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .message-details {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+            border-left: 4px solid #34a853;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .detail-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #5f6368;
+            width: 120px;
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            color: #3c4043;
+            flex-grow: 1;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 35px;
+        }
+
+        button {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-new {
+            background-color: #1a73e8;
+            color: white;
+        }
+
+        .btn-new:hover {
+            background-color: #1557b0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.25);
+        }
+
+        .btn-view {
+            background-color: #f1f3f4;
+            color: #5f6368;
+        }
+
+        .btn-view:hover {
+            background-color: #e8eaed;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer {
+            margin-top: 40px;
+            color: #80868b;
+            font-size: 14px;
+        }
+
+        @keyframes scaleUp {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container > * {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .success-message {
+            animation-delay: 0.2s;
+            animation-fill-mode: both;
+        }
+
+        .message-details {
+            animation-delay: 0.4s;
+            animation-fill-mode: both;
+        }
+
+        .action-buttons {
+            animation-delay: 0.6s;
+            animation-fill-mode: both;
+        }
+
+        @media (max-width: 600px) {
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .detail-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .detail-label {
+                width: 100%;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .success-message {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            </svg>
+        </div>
+
+        <h1>Message Sent Successfully!</h1>
+
+        <p class="success-message">
+            Your message has been delivered successfully. The recipient will receive it shortly.
+        </p>
+
+        <div class="message-details">
+            <div class="detail-row">
+                <span class="detail-label">To:</span>
+                <span class="detail-value">{{ email }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Date & Time:</span>
+                <span class="detail-value">October 16, 2023 - 14:45</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Message ID:</span>
+                <span class="detail-value">MSG-5X8A2-20231016</span>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="/" style="text-decoration: none"><button class="btn-new">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>
+<path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6Z"/>
+                </svg>
+                Back to Home Page
+            </button></a>
+        </div>
+
+        <div class="footer">
+            <p>You can check the status of your message in the "Sent" folder of your email client.</p>
+        </div>
+    </div>
+
+</body>
+</html>

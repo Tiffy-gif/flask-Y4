@@ -1,0 +1,213 @@
+{% extends 'master.html' %}
+{% block content %}
+  <main class="pt-90">
+    <div class="mb-4 pb-4"></div>
+    <section class="shop-checkout container">
+      <h2 class="page-title">Cart</h2>
+      <div class="checkout-steps">
+        <a href="cart.html" class="checkout-steps__item active">
+          <span class="checkout-steps__item-number">01</span>
+          <span class="checkout-steps__item-title">
+            <span>Shopping Bag</span>
+            <em>Manage Your Items List</em>
+          </span>
+        </a>
+
+      </div>
+      <div class="shopping-cart">
+        <div class="cart-table__wrapper">
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th></th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th></th>
+              </tr>
+            </thead>
+{#              item#}
+            <tbody id="main_item">
+              <tr>
+                <td>
+                  <div class="shopping-cart__product-item">
+                    <img loading="lazy" src="/static/assets/images/home/mens-lifestyle-shoes/product/1.png" width="120" height="120" alt="" />
+                  </div>
+                </td>
+                <td>
+                  <div class="shopping-cart__product-item__detail">
+                    <h4>Zessi Dresses</h4>
+                  </div>
+                </td>
+                <td>
+                  <span class="shopping-cart__product-price">$99</span>
+                </td>
+                <td>
+                  <div class="qty-control position-relative">
+                    <input type="number" name="quantity" value="3" min="1" class="qty-control__number text-center" id="qty-btn">
+
+                  </div>
+                </td>
+                <td>
+                  <span class="shopping-cart__subtotal">$297</span>
+                </td>
+                <td>
+                  <a href="#" class="remove-cart">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="#767676" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M0.259435 8.85506L9.11449 0L10 0.885506L1.14494 9.74056L0.259435 8.85506Z" />
+                      <path d="M0.885506 0.0889838L9.74057 8.94404L8.85506 9.82955L0 0.97449L0.885506 0.0889838Z" />
+                    </svg>
+                  </a>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+{#        recipt#}
+        <div class="shopping-cart__totals-wrapper">
+          <div class="sticky-content">
+            <div class="shopping-cart__totals">
+              <h3>Cart Totals</h3>
+              <table class="cart-totals">
+                <tbody>
+                  <tr>
+                    <th>Total(USD)</th>
+                    <td id="label_total_usd">$1300</td>
+                  </tr>
+                  <tr>
+                    <th>Total(KH)</th>
+                    <td id="label_total_kh">$1319</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="mobile_fixed-btn_wrapper">
+              <div class="button-wrapper container">
+                  <a href="/checkout" class="btn btn-primary btn-checkout" id="checkout-button">PROCEED TO CHECKOUT</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+{% endblock %}
+
+{% block scriptBlock %}
+    <script>
+        let main_item = document.getElementById('main_item')
+        let carts = JSON.parse(localStorage.getItem('carts') ?? '[]')
+        let cart_item = ``
+        let total = 0
+        function renderCart() {
+            carts.forEach((item, index) => {
+                total += (item.price * item.qty)
+                cart_item += `
+                   <tr>
+                    <td>
+                      <div class="shopping-cart__product-item">
+                        <img loading="lazy" src="${item.image}" width="120" height="120" alt="" />
+                      </div>
+                    </td>
+                    <td>
+                      <div class="shopping-cart__product-item__detail">
+                        <h4>${item.title}</h4>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="shopping-cart__product-price">$${item.price}</span>
+                    </td>
+                    <td>
+                      <div class="qty-control position-relative">
+                        <input type="number" name="quantity" value="${item.qty}" min="1" class="qty-control__number text-center" id="qty-btn" data-index="${index}">
+                        <div class="qty-control__reduce" data-index ="${index}">-</div>
+                        <div class="qty-control__increase" data-index ="${index}">+</div>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="shopping-cart__subtotal">$${item.price * item.qty}</span>
+                    </td>
+                    <td>
+                      <a href="#" class="remove-cart" data-index="${index}">
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="#767676" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M0.259435 8.85506L9.11449 0L10 0.885506L1.14494 9.74056L0.259435 8.85506Z" />
+                          <path d="M0.885506 0.0889838L9.74057 8.94404L8.85506 9.82955L0 0.97449L0.885506 0.0889838Z" />
+                        </svg>
+                      </a>
+                    </td>
+                  </tr>
+                `
+            })
+            main_item.innerHTML = cart_item
+            document.getElementById('label_total_usd').innerHTML = `$${total.toFixed(2)}`
+            document.getElementById('label_total_kh').innerHTML =  `៛${(total*4100).toLocaleString()}`
+            const checkoutButton = document.getElementById('checkout-button');
+            if (carts.length === 0) {
+                checkoutButton.style.display = 'none'; // Hide the button
+            } else {
+                checkoutButton.style.display = 'block'; // Ensure the button is visible
+            }
+            localStorage.setItem('carts', JSON.stringify(carts));
+        }
+
+        function updateQuantity(index, newQty) {
+            if (newQty < 1) {
+                // If quantity is reduced to 0, you could remove the item
+                // or simply set it to 1, depending on desired behavior.
+                // For now, we'll prevent it from going below 1.
+                newQty = 1;
+            }
+            carts[index].qty = newQty;
+            renderCart();
+
+        }
+        function removeCartItem(index) {
+            carts.splice(index, 1);
+            renderCart();
+        }
+        // Initial render of the cart
+        renderCart();
+
+        // Add event listeners to the main cart container
+        main_item.addEventListener('click', (event) => {
+            const target = event.target;
+            if (event.target.classList.contains('qty-control__increase')) {
+                const index = event.target.dataset.index;
+                let currentQty = carts[index].qty;
+                updateQuantity(index, currentQty + 1);
+            }
+
+            if (event.target.classList.contains('qty-control__reduce')) {
+                const index = event.target.dataset.index;
+                let currentQty = carts[index].qty;
+                if (currentQty > 1) {
+                    updateQuantity(index, currentQty - 1);
+                }
+            }
+
+            if (target.closest('.remove-cart')) {
+                event.preventDefault();
+                const index = target.closest('.remove-cart').dataset.index;
+                removeCartItem(index);
+            }
+            location.reload()
+        });
+        main_item.addEventListener('change', (event) => {
+            if (event.target.classList.contains('qty-control__number')) {
+                const index = event.target.dataset.index;
+                const newQty = parseInt(event.target.value, 10);
+                if (!isNaN(newQty) && newQty >= 1) {
+                    updateQuantity(index, newQty);
+                } else {
+                    // Revert to the previous valid quantity if the input is invalid
+                    event.target.value = carts[index].qty;
+                }
+            }
+        });
+
+
+    </script>
+{% endblock %}

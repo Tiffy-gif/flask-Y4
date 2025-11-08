@@ -1,0 +1,157 @@
+{% extends 'master.html' %}
+{% block content %}
+    <main>
+        <div class="container mw-1620 bg-white border-radius-10">
+            <section class="swiper-container js-swiper-slider swiper-number-pagination slideshow" data-settings='{
+                "autoplay": {
+                  "delay": 5000
+                },
+                "slidesPerView": 1,
+                "effect": "fade",
+                "loop": true
+              }'>
+
+              <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                  <div class="overflow-hidden position-relative h-100">
+                    <div class="slideshow-character position-absolute bottom-0 pos_right-center">
+                      <img loading="lazy" src="/static/assets/images/home/mens-lifestyle-shoes/pngegg.png" width="542" height="733"
+                        alt="Woman Fashion 1"
+                        class="slideshow-character__img animate animate_fade animate_btt animate_delay-9 w-auto h-auto" />
+                      <div class="character_markup type2">
+                        <p class="text-uppercase font-sofia mark-grey-color animate animate_fade animate_btt animate_delay-10 mb-0">
+                          sporter</p>
+                      </div>
+                    </div>
+                    <div class="slideshow-text container position-absolute start-50 top-50 translate-middle">
+                      <h6 class="text_dash text-uppercase fs-base fw-medium animate animate_fade animate_btt animate_delay-3">
+                        Every Step With</h6>
+                      <h2 class="h1 fw-normal mb-0 animate animate_fade animate_btt animate_delay-5"></h2>
+                      <h2 class="h1 fw-bold animate animate_fade animate_btt animate_delay-5">CUSHION</h2>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="swiper-slide">
+                  <div class="overflow-hidden position-relative h-100">
+                    <div class="slideshow-character position-absolute bottom-0 pos_right-center">
+                      <img loading="lazy" src="/static/assets/images/home/mens-lifestyle-shoes/pngegg%20(1).png" width="400" height="733"
+                        alt="Woman Fashion 1"
+                        class="slideshow-character__img animate animate_fade animate_btt animate_delay-9 w-auto h-auto" />
+                      <div class="character_markup">
+                        <p class="text-uppercase font-sofia fw-bold animate animate_fade animate_rtl animate_delay-10">Sport
+                        </p>
+                      </div>
+                    </div>
+                    <div class="slideshow-text container position-absolute start-50 top-50 translate-middle">
+                      <h6 class="text_dash text-uppercase fs-base fw-medium animate animate_fade animate_btt animate_delay-3">
+                        New Arrivals</h6>
+                      <h2 class="h1 fw-normal mb-0 animate animate_fade animate_btt animate_delay-5">Bring life With</h2>
+                      <h2 class="h1 fw-bold animate animate_fade animate_btt animate_delay-5">NIKE</h2>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="swiper-slide">
+                  <div class="overflow-hidden position-relative h-100">
+                    <div class="slideshow-character position-absolute bottom-0 pos_right-center">
+                      <img loading="lazy" src="/static/assets/images/home/mens-lifestyle-shoes/shoed/pngwing.com%20(9).png" width="400" height="690"
+                        alt="Woman Fashion 2"
+                        class="slideshow-character__img animate animate_fade animate_rtl animate_delay-10 w-auto h-auto" />
+                    </div>
+                    <div class="slideshow-text container position-absolute start-50 top-50 translate-middle">
+                      <h6 class="text_dash text-uppercase fs-base fw-medium animate animate_fade animate_btt animate_delay-3">
+                        New Arrivals</h6>
+                      <h2 class="h1 fw-normal mb-0 animate animate_fade animate_btt animate_delay-5">Nike</h2>
+                      <h2 class="h1 fw-bold animate animate_fade animate_btt animate_delay-5"> Journey Run</h2>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="container">
+                <div
+                  class="slideshow-pagination slideshow-number-pagination d-flex align-items-center position-absolute bottom-0 mb-5">
+                </div>
+              </div>
+            </section>
+            <div class="mb-3 mb-xl-5 pt-1 pb-4"></div>
+            <section class="products-grid container">
+                <h2 class="section-title text-center mb-3 pb-xl-3 mb-xl-4">All Products</h2>
+                <div class="mb-3 mb-xl-5 pt-1 pb-4"></div>
+                <div class="row">
+                {% for item in products %}
+                  <div class="col-6 col-md-4 col-lg-3">
+                    <div class="product-card product-card_style3 mb-3 mb-md-4 mb-xxl-5">
+                      <div class="pc__img-wrapper">
+                        <a href="/product/{{ item['id'] }}">
+                          <img loading="lazy" src="{{ item ['image'] }}" width="330" height="400"
+                            alt="Cropped Faux leather Jacket" class="pc__img">
+                        </a>
+                      </div>
+
+                      <div class="pc__info position-relative">
+                        <h6 class="pc__title"><a href="/product/{{ item['id'] }}">{{ item ['title'] }}</a></h6>
+                        <div class="product-card__price d-flex align-items-center">
+                          <span class="money price text-secondary">${{ item ['price'] }}</span>
+                        </div>
+
+                        <div class="anim_appear-bottom position-absolute bottom-0 start-0 d-none d-sm-flex align-items-center bg-body">
+                          <button class="btn-link btn-link_lg me-4 text-uppercase fw-medium js-add-cart btn-add-to-cart"
+                            title="Add To Cart"
+                            data-title="{{ item['title'] }}"
+                            data-id="{{ item['id'] }}"
+                            data-price="{{ item['price'] }}"
+                            data-image="{{ item['image'] }}">Add To Cart</button>
+                          <button class="btn-link btn-link_lg me-4 text-uppercase fw-medium js-quick-view"
+                            data-bs-toggle="modal" data-bs-target="#quickView" title="Quick view">
+                            <span class="d-none d-xxl-block"><a href="/product/{{ item['id'] }}">Quick View</a></span>
+                            <span class="d-block d-xxl-none"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <use href="#icon_view"></use>
+                              </svg></span>
+                          </button>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+
+                </div><!-- /.row -->
+
+            </section>
+        </div>
+    </main>
+{% endblock %}
+
+{% block scriptBlock %}
+    <script>
+        let carts = JSON.parse(localStorage.getItem('carts') ?? '[]')
+        document.querySelectorAll('.btn-add-to-cart').forEach(item=>{
+            item.addEventListener('click',function (){
+                let id = this.getAttribute('data-id')
+                let title = this.getAttribute('data-title')
+                let price = this.getAttribute('data-price')
+                let image = this.getAttribute('data-image')
+                let dpl_index = carts.findIndex(carts=> carts.id === id)
+                if (dpl_index !== -1){
+                    carts[dpl_index].qty +=1
+                    }else{
+                    carts.push({
+                        'id':id,
+                        'title':title,
+                        'qty':1,
+                        'price':price,
+                        'image':image
+                    })
+                    location.reload();
+                }
+
+                localStorage.setItem('carts', JSON.stringify(carts))
+            })
+        })
+    </script>
+{% endblock %}

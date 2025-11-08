@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Invoice</title>
+  <style>
+    .invoice-box {
+      margin: auto;
+      padding: 30px;
+      border: 1px solid #eee;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .company-info,
+    .client-info {
+      margin-bottom: 20px;
+    }
+    .company-info strong,
+    .client-info strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table thead {
+      background: #f5f5f5;
+    }
+    table th,
+    table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    .totals {
+      margin-top: 30px;
+      width: 100%;
+    }
+    .totals td {
+      padding: 10px;
+    }
+    .totals .label {
+      text-align: right;
+      font-weight: bold;
+    }
+    .totals .value {
+      text-align: right;
+      width: 120px;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-box">
+    <h1>INVOICE</h1>
+
+    <div class="company-info">
+      <strong>NIKE FAKE CO.LTD</strong>
+      123 Business Street<br/>
+      Phnom Penh, Cambodia<br/>
+      Email: Nike@fake.com
+    </div>
+
+    <div class="client-info">
+      <strong>Bill To:</strong>
+      {{ customer_name }}<br/>
+      {{ email }}<br/>
+      Area : {{ area }}<br/>
+      St: {{ street }}, No: {{ house }}
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Product Name</th>
+          <th>Qty</th>
+          <th>Unit Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart_item %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ item.title }}</td>
+          <td>{{ item.qty }}</td>
+          <td>${{ item.price }}</td>
+          <td>${{ "%.2f"|format(item.price | float * item.qty | int) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <table class="totals">
+      <tr>
+        <td class="label">Subtotal:</td>
+        <td class="value" id="label_subtotal">${{ "%.2f"|format(total) }}</td>
+      </tr>
+      <tr>
+        <td class="label">Delivery :</td>
+        <td class="value">Free Delivery</td>
+      </tr>
+      <tr>
+        <td class="label">Total(KHR):</td>
+        <td class="value" id="label_total_kh">៛{{ "{:,}".format(total * 4100) }}</td>
+      </tr>
+      <tr>
+        <td class="label">Total(USD):</td>
+        <td class="value" id="label_total_usd"><strong>${{ "%.2f"|format(total) }}</strong></td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>
