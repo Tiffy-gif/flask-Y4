@@ -1,3 +1,5 @@
+from flask_jwt_extended import jwt_required
+
 from app import app , db
 from sqlalchemy import text
 from flask import request
@@ -5,6 +7,7 @@ from models import Category
 from werkzeug.security import generate_password_hash
 
 @app.get('/category/list')
+@jwt_required()
 def category_list():
     return get_category_info(category_id=0)
 @app.get('/category/list/<int:category_id>')

@@ -1,4 +1,4 @@
-from urllib.parse import non_hierarchical
+from flask_jwt_extended import jwt_required
 
 from app import app , db
 from sqlalchemy import text
@@ -7,6 +7,8 @@ from models import Branch
 from werkzeug.utils import secure_filename
 
 @app.get('/branch/list')
+@jwt_required()
+
 def branch_list():
     return get_branch_info(branch_id=0)
 @app.get('/branch/list/<int:branch_id>')

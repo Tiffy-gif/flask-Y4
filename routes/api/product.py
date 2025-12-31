@@ -1,3 +1,5 @@
+from flask_jwt_extended import jwt_required
+
 from app import app , db
 from sqlalchemy import text
 from flask import request
@@ -5,6 +7,7 @@ from models import Product
 from werkzeug.security import generate_password_hash
 
 @app.get('/product/list')
+@jwt_required()
 def product_list():
     return get_product_info(product_id=0)
 @app.get('/product/list/<int:product_id>')
