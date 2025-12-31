@@ -8,5 +8,17 @@ from routes.front.contact import *
 from routes.error import *
 
 # admin
-from routes.admin.branch import *
-from routes.admin.user import *
+from routes.admin.layout import *
+
+
+
+
+# api
+from routes.api.branch import *
+from routes.api.user import *
+from routes.api.admin import *
+from routes.api.category import *
+from routes.api.product import *
+
+# auth
+from routes.auth.auth import *

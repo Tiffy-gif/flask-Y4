@@ -1,0 +1,4 @@
+__pycache__/
+.idea/*
+#/public/js/*
+#/public/css/*

@@ -6,4 +6,8 @@ class User(db.Model):
     username = db.Column(db.String(128))
     email = db.Column(db.String(128), nullable=False)
     password = db.Column(db.String(128), nullable=False)
+    phone = db.Column(db.String(128), nullable=True)
+    role = db.Column(db.String(128), nullable=True)
+    image = db.Column(db.String(128), nullable=True)
     remark = db.Column(db.String(256))
+

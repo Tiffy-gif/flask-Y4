@@ -12,9 +12,9 @@
       <div class="tab-content pt-2" id="login_register_tab_content">
         <div class="tab-pane fade show active" id="tab-item-register" role="tabpanel" aria-labelledby="register-tab">
           <div class="register-form">
-            <form method="POST" action="#" name="register-form" class="needs-validation" novalidate="">
+            <form method="POST" action="/user/create" name="register-form" class="needs-validation" novalidate="">
               <div class="form-floating mb-3">
-                <input class="form-control form-control_gray " name="name" value="" required="" autocomplete="name"
+                <input id="username" type="text" class="form-control form-control_gray " name="username" value="" required="" autocomplete="name"
                   autofocus="">
                 <label for="name">Name</label>
               </div>
