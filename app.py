@@ -25,7 +25,7 @@ mail = Mail(app)
 
 
 # MySql
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root@localhost/app"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://app@**Aa12345localhost/app"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False # Optional, to suppress a warning
 
 db = SQLAlchemy(app)
