@@ -1,4 +1,5 @@
 from flask import Flask, render_template , request , session , json , jsonify
+from flaskext.mysql import MySQL
 
 from product import products
 from flask_mail import Mail , Message
@@ -18,7 +19,15 @@ app.config['MAIL_DEFAULT_SENDER'] = 'vidlovergt123@gmail.com'
 mail = Mail(app)
 
 # Database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+# db = SQLAlchemy(app)
+# migrate = Migrate(app, db)
+
+
+# MySql
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root@localhost/app"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False # Optional, to suppress a warning
+
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 import models
