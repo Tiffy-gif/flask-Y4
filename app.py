@@ -25,8 +25,15 @@ mail = Mail(app)
 
 
 # MySql
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://app@**Aa12345localhost/app"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False # Optional, to suppress a warning
+# app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://app@**Aa12345localhost/app"
+# app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False # Optional, to suppress a warning
+
+DB_CONFIG= {
+    'host': 'localhost',
+    'user': 'app',
+    'password': '**Aa12345',
+    'database': 'app',
+}
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
