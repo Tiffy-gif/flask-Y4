@@ -18,22 +18,31 @@ app.config['MAIL_DEFAULT_SENDER'] = 'vidlovergt123@gmail.com'
 
 mail = Mail(app)
 
-# Database
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-# db = SQLAlchemy(app)
-# migrate = Migrate(app, db)
-
 
 # MySql
-# app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://app@**Aa12345localhost/app"
+#app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://app@**Aa12345localhost/app"
 # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False # Optional, to suppress a warning
+import urllib.parse
 
+# Your actual password
+password = "**Aa12345" 
+
+# URL-encode the password
+encoded_password = urllib.parse.quote_plus(password)
+
+# Construct the URI
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://app:{encoded_password}@localhost/app"
 DB_CONFIG= {
     'host': 'localhost',
     'user': 'app',
     'password': '**Aa12345',
     'database': 'app',
 }
+
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+import models
+import routes
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
