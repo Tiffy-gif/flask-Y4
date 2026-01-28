@@ -2,101 +2,47 @@ from werkzeug.utils import secure_filename
 from app import app , db, render_template
 from flask import request, redirect, url_for, session, flash
 from models import User
-from werkzeug.security import generate_password_hash
-@app.get('/users')
-def admin_user():
-    model = 'user'
-    users = User.query.all()
-    return render_template('admin/users/users.html', model=model,users=users)
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
-@app.get('/form/users/create')
-def form_user_create():
-    model = 'user_create    '
-    status = request.args.get('status')
-    return render_template('admin/users/add_user.html', model=model, status=status)
-
-@app.get('/form/users/edit')
-def form_user_edit():
-    model = 'form_user_edit'
-    status = request.args.get('status')
-    user = None
-    if status == 'edit':
-        user_id = int(request.args.get('user_id'))
-        user = User.query.get(user_id)
-
-    return render_template('admin/users/edit_user.html', model=model, status=status, user=user)
+@app.get('/login')
+def login_page():
+    return render_template('login.html')
 
 
-@app.get('/form/users/delete')
-def form_user_delete():
-    model = 'user_delete'
-    user_id = int(request.args.get('user_id'))
-    user = User.query.get(user_id)
-    return render_template('admin/users/delete.html', model=model, user=user)
-
-
-@app.post('/users/create')
-def user_create():
+@app.post('/admin/do_login')
+def do_login():
     form = request.form
-    file = request.files.get('image')
+    username = form.get('username')
+    password = form.get('password')
+    user = User.query.filter_by(username=username).first()
 
-    filename = None
-    if file and file.filename:
-        filename = secure_filename(file.filename)
-        upload_path = os.path.join('static/uploads', filename)
-        file.save(upload_path)
+    if not user:
+        flash('Invalid username or password', 'danger')
+        return redirect(url_for('login_page'))
 
-    user = User(
-        branch_id=1,
-        username=form.get('username'),
-        email=form.get('email'),
-        phone=form.get('phone'),
-        role=form.get('role'),
-        password=generate_password_hash(form.get('password')),
-        image=filename
-    )
+    hash_password = user.password
+    if not check_password_hash(hash_password, password):
+        flash('Invalid username or password', 'danger')
+        return redirect(url_for('login_page'))
+    else:
+        # Store user info in session
+        session['user_id'] = user.id
+        session['username'] = user.username
+        session['role'] = user.role
+        session['user_image'] = user.image  # Store user image for display
+        session.permanent = True
 
-    db.session.add(user)
-    db.session.commit()
-
-    return redirect(url_for('admin_user'))
-
-
-from werkzeug.utils import secure_filename
-import os
-
-@app.post('/users/edit')
-def user_edit():
-    form = request.form
-    user_id = int(form.get('user_id'))
-    user = User.query.get(user_id)
-
-    if user:
-        user.username = form.get('username') or user.username
-        user.email = form.get('email') or user.email
-        user.phone = form.get('phone') or user.phone
-        user.role = form.get('role') or user.role
-
-        # Handle image uploads
-        image = request.files.get('image')
-        if image and image.filename:
-            filename = secure_filename(image.filename)
-            upload_path = os.path.join(app.root_path, 'static/uploads', filename)
-            image.save(upload_path)
-            user.image = filename  # only overwrite if new image
-
-        db.session.commit()
-
-    return redirect(url_for('admin_user'))
+        if user.role == 'admin' or user.username == 'admin':
+            return redirect(url_for('admin_dashboard'))
+        else:
+            flash(f'Welcome back, {user.username}!', 'success')
+            return redirect(url_for('index'))
 
 
-@app.post('/users/delete')
-def user_delete():
-    user_id = request.form.get('user_id')
-    user = User.query.get(user_id)
-    if user:
-        db.session.delete(user)
-        db.session.commit()
-
-    return redirect(url_for('admin_user'))
+@app.route('/logout')
+def logout():
+    username = session.get('username', 'User')
+    session.clear()
+    flash(f'Goodbye, {username}! You have been logged out successfully', 'success')
+    return redirect(url_for('login_page'))

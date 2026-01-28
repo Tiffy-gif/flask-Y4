@@ -46,7 +46,9 @@
                             <div class="center-heading">Main Home</div>
                             <ul class="menu-list">
                                 <li class="menu-item">
-                                    <a href="#" class="">
+                                    <a href="{{ url_for('admin_dashboard') }}"
+                                       class="nav-link {{ 'active' if model == 'dashboard'}}"
+                                       >
                                         <div class="icon"><i class="icon-grid"></i></div>
                                         <div class="text">Dashboard</div>
                                     </a>
@@ -59,19 +61,22 @@
                                 <li class="menu-item has-children">
                                     <a href="javascript:void(0);" class="menu-item-button">
                                         <div class="icon"><i class="icon-shopping-cart"></i></div>
-                                        <div class="text">Products</div>
+                                        <div class="text"> Products</div>
                                     </a>
                                     <ul class="sub-menu">
+
                                         <li class="sub-menu-item">
-                                            <a href="#" class="">
+                                            <a href="{{ url_for('form_product_add') }}">
                                                 <div class="text">Add Product</div>
                                             </a>
                                         </li>
+
                                         <li class="sub-menu-item">
-                                            <a href="#" class="">
+                                            <a href="{{ url_for('admin_products') }}">
                                                 <div class="text">Products</div>
                                             </a>
                                         </li>
+
                                     </ul>
                                 </li>
 {#                                {{-- category_nav --}}#}
@@ -82,12 +87,12 @@
                                     </a>
                                     <ul class="sub-menu">
                                         <li class="sub-menu-item">
-                                            <a href="#" class="">
+                                            <a href="{{ url_for('form_category_add') }}">
                                                 <div class="text">New Category</div>
                                             </a>
                                         </li>
                                         <li class="sub-menu-item">
-                                            <a href="#" class="">
+                                            <a href="{{ url_for('admin_category') }}">
                                                 <div class="text">Categories</div>
                                             </a>
                                         </li>
@@ -95,7 +100,10 @@
                                 </li>
 {#                                {{-- user_nav --}}#}
                                 <li class="menu-item">
-                                    <a href="#" class="">
+                                    <a href="{{ url_for('admin_user') }}"
+
+                                       class="nav-link {{ 'active' if model == 'user'}}"
+                                    >
                                         <div class="icon"><i class="icon-user"></i></div>
                                         <div class="text">User</div>
                                     </a>
@@ -143,14 +151,13 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <form method="post" action="/logout" id="logout-form">
-                                                <a href="#" class="user-item" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                                                <a href="#" class="user-item" onclick="LogoutUser()">
                                                     <div class="icon">
                                                         <i class="icon-log-out"></i>
                                                     </div>
                                                     <div class="body-title-2">Log out</div>
                                                 </a>
-                                                </form>
+
                                             </li>
                                         </ul>
                                     </div>
@@ -170,6 +177,29 @@
             </div>
         </div>
     </div>
+    <script>
+    function LogoutUser() {
+        console.log("Logout clicked!");
+
+        fetch('/logout', {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`
+            }
+        })
+        .then(res => {
+            console.log("Logout response:", res);
+            return res.json();
+        })
+        .then(data => {
+            console.log("Logout success:", data);
+            localStorage.removeItem('access_token');
+            window.location.href = '/login';
+        })
+        .catch(err => console.error("Logout error:", err));
+    }
+    </script>
+
     <script src="/static/admin/js/jquery.min.js"></script>
     <script src="/static/admin/js/bootstrap.min.js"></script>
     <script src="/static/admin/js/bootstrap-select.min.js"></script>

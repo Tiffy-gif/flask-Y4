@@ -4,10 +4,11 @@ from app import app , mail
 from flask_mail import Message
 from flask import render_template , request
 from tabulate import tabulate
-
+from routes.front import *
 @app.route('/checkout')
 def checkout():
-    return render_template('checkout.html')
+    orders = Orders.query.all()
+    return render_template('checkout.html',orders=orders)
 
 @app.post('/confirm')
 def confirm():
@@ -26,7 +27,7 @@ def confirm():
     for item in cart_item:
         item_row.append(
             [
-                f"{item['title'][0:15]}...",
+                f"{item['name'][0:15]}...",
                 "$"+item["price"],
                 item["qty"],
             ]

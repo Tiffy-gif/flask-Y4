@@ -12,15 +12,16 @@ from werkzeug.security import generate_password_hash
 def register():
     return render_template('register.html')
 @app.get('/user/list')
-@jwt_required()
+
 def user_list():
     return get_user_info(user_id=0)
+
 @app.get('/user/list/<int:user_id>')
 def user_list_by_id(user_id):
     return get_user_info(user_id=user_id)
 
-@app.post('/user/delete')
-def user_delete():
+@app.post('/user/delete/api')
+def user_delete1():
     form = request.get_json()
     if not form:
         return {
@@ -83,7 +84,7 @@ def get_user_info(user_id: int = 0):
     return dict(user_check_id=user_id)
 
 @app.post('/user/create')
-def user_create():
+def user_create1():
     form = request.form
     password = form.get('password')
     password_confirmation = form.get('password_confirmation')

@@ -31,9 +31,12 @@
             <tbody id="main_item">
               <tr>
                 <td>
-                  <div class="shopping-cart__product-item">
-                    <img loading="lazy" src="/static/assets/images/home/mens-lifestyle-shoes/product/1.png" width="120" height="120" alt="" />
-                  </div>
+                   {% for product in products %}
+                      <div class="shopping-cart__product-item">
+                          <img src="{{ url_for('static', filename='product_upload/' ~ product.image) }}" width="120" height="120" alt="" />
+                      </div>
+                    {% endfor %}
+
                 </td>
                 <td>
                   <div class="shopping-cart__product-item__detail">
@@ -109,7 +112,7 @@
                    <tr>
                     <td>
                       <div class="shopping-cart__product-item">
-                        <img loading="lazy" src="${item.image}" width="120" height="120" alt="" />
+                        <img loading="lazy" src="/static/product_upload/${item.image}" width="120" height="120" alt="" />
                       </div>
                     </td>
                     <td>

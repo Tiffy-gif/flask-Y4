@@ -1,59 +1,133 @@
 {% extends 'master.html' %}
 {% block content %}
-	<main class="pt-90">
-        <div class="mb-4 pb-4"></div>
-        <section class="login-register container">
-          <ul class="nav nav-tabs mb-5" id="login_register" role="tablist">
+
+<main class="pt-90">
+    <div class="mb-4 pb-4"></div>
+    <section class="login-register container">
+        <ul class="nav nav-tabs mb-5" id="login_register" role="tablist">
             <li class="nav-item" role="presentation">
-              <a class="nav-link nav-link_underscore active" id="login-tab" data-bs-toggle="tab" href="#tab-item-login"
-                role="tab" aria-controls="tab-item-login" aria-selected="true">Login</a>
+                <a class="nav-link nav-link_underscore active" id="login-tab" data-bs-toggle="tab" href="#tab-item-login"
+                    role="tab" aria-controls="tab-item-login" aria-selected="true">Login</a>
             </li>
-          </ul>
-          <div class="tab-content pt-2" id="login_register_tab_content">
+        </ul>
+        <div class="tab-content pt-2" id="login_register_tab_content">
             <div class="tab-pane fade show active" id="tab-item-login" role="tabpanel" aria-labelledby="login-tab">
-              <div class="login-form">
+                <div class="login-form" id="loginFormContainer">
 
-                <!-- Flash messages -->
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                  {% if messages %}
-                    {% for category, message in messages %}
-                      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                      </div>
-                    {% endfor %}
-                  {% endif %}
-                {% endwith %}
+                    <!-- Enhanced Flash messages -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert" id="flashAlert">
+                                    <div class="alert-content">
+                                        <strong>
+                                            {% if category in ['error', 'danger'] %}
+                                                Login Failed
+                                            {% elif category == 'success' %}
+                                                Success
+                                            {% elif category == 'info' %}
+                                                Notice
+                                            {% endif %}
+                                        </strong>
+                                        <div>{{ message }}</div>
+                                    </div>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
 
-                <form method="POST" action="/login_confirm" name="login-form" class="needs-validation" novalidate="">
-                  <div class="form-floating mb-3">
-                    <input class="form-control form-control_gray" name="username" id="username" type="text" required autocomplete="email" autofocus>
-                    <label for="username">Username *</label>
-                  </div>
+                    <form method="POST" action="{{ url_for('do_login') }}" name="login-form" class="needs-validation" novalidate="">
+                        <div class="form-floating mb-3">
+                            <input class="form-control form-control_gray {% if request.args.get('error') %}is-invalid{% endif %}"
+                                   name="username" id="username" type="text" required autocomplete="username" autofocus
+                                   value="{{ request.form.get('username', '') }}">
+                            <label for="username">Username *</label>
+                        </div>
 
-                  <div class="pb-3"></div>
+                        <div class="pb-3"></div>
 
-                  <div class="form-floating mb-3">
-                    <input id="password" type="password" class="form-control form-control_gray" name="password" required autocomplete="current-password">
-                    <label for="password">Password *</label>
-                  </div>
+                        <div class="form-floating mb-3">
+                            <input id="password" type="password"
+                                   class="form-control form-control_gray {% if request.args.get('error') %}is-invalid{% endif %}"
+                                   name="password" required autocomplete="current-password">
+                            <label for="password">Password *</label>
+                        </div>
 
-                  <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="remember_me" name="remember_me">
-                    <label class="form-check-label" for="remember_me">Remember me</label>
-                  </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="remember_me" name="remember_me">
+                            <label class="form-check-label" for="remember_me">Remember me</label>
+                        </div>
 
-                  <button class="btn btn-primary w-100 text-uppercase" type="submit">Log In</button>
+                        <button class="btn btn-primary w-100 text-uppercase" type="submit">Log In</button>
 
-                  <div class="customer-option mt-4 text-center">
-                    <span class="text-secondary">No account yet?</span>
-                    <a href="/register" class="btn-text js-show-register">Create Account</a>
-                  </div>
-                </form>
+                        <div class="customer-option mt-4 text-center">
+                            <span class="text-secondary">No account yet?</span>
+                            <a href="/register" class="btn-text js-show-register">Create Account</a>
+                        </div>
+                    </form>
 
-              </div>
+                </div>
             </div>
-          </div>
-        </section>
-    </main>
+        </div>
+    </section>
+</main>
+
+<script>
+    // Auto-dismiss flash messages after 7 seconds
+    setTimeout(function() {
+        const flashAlert = document.getElementById('flashAlert');
+        if (flashAlert) {
+            flashAlert.classList.add('fade-out');
+            setTimeout(() => {
+                flashAlert.remove();
+            }, 500);
+        }
+    }, 7000);
+
+    // Add shake animation to form on error
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('error')) {
+        const formContainer = document.getElementById('loginFormContainer');
+        if (formContainer) {
+            formContainer.classList.add('shake');
+            setTimeout(() => {
+                formContainer.classList.remove('shake');
+            }, 600);
+        }
+    }
+
+    // Remove error styling when user starts typing
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+
+    if (usernameInput) {
+        usernameInput.addEventListener('input', function() {
+            this.classList.remove('is-invalid');
+            if (urlParams.get('error')) {
+                const newUrl = window.location.pathname;
+                window.history.replaceState({}, '', newUrl);
+            }
+        });
+    }
+
+    if (passwordInput) {
+        passwordInput.addEventListener('input', function() {
+            this.classList.remove('is-invalid');
+        });
+    }
+
+    // Form validation
+    const form = document.querySelector('.needs-validation');
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    }
+</script>
+
 {% endblock %}

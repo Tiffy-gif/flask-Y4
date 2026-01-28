@@ -14,7 +14,7 @@ def category_list():
 def category_list_by_id(category_id):
     return get_category_info(category_id=category_id)
 @app.post('/category/create')
-def category_create():
+def category_create1():
     form = request.get_json()
     if not form:
         return 'no data'
@@ -33,7 +33,7 @@ def category_create():
         'category': get_category_info(category.id)
     }, 200
 @app.post('/category/delete')
-def category_delete():
+def category_delete1():
     form = request.get_json()
     if not form:
         return {

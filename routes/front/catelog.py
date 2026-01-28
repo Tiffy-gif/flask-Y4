@@ -1,8 +1,8 @@
-from app import app
+from app import app, db
 from flask import render_template
-from product import products
+from models import Product
 
 @app.get('/catelog')
 def catelog():
-    product = products
-    return  render_template('catolog.html', products=product)
+    products = Product.query.all()
+    return render_template('catolog.html', products=products)

@@ -8,13 +8,13 @@ from werkzeug.security import generate_password_hash
 
 @app.get('/product/list')
 @jwt_required()
-def product_list():
+def product_list1():
     return get_product_info(product_id=0)
 @app.get('/product/list/<int:product_id>')
 def product_list_by_id(product_id):
     return get_product_info(product_id=product_id)
 @app.post('/product/create')
-def product_create():
+def product_create1():
     form = request.get_json()
     if not form:
         return 'no data'
@@ -33,7 +33,7 @@ def product_create():
         'product': get_product_info(product.id)
     }, 200
 @app.post('/product/delete')
-def product_delete():
+def product_delete1():
     form = request.get_json()
     if not form:
         return {
