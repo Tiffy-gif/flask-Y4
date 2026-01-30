@@ -98,6 +98,24 @@
                                         </li>
                                     </ul>
                                 </li>
+                                <li class="menu-item has-children">
+                                    <a href="javascript:void(0);" class="menu-item-button">
+                                        <div class="icon"><i class="icon-file-plus"></i></div>
+                                        <div class="text">Order</div>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="sub-menu-item">
+                                            <a href="{{ url_for('admin_orders') }}" class="">
+                                                <div class="text">Orders</div>
+                                            </a>
+                                        </li>
+                                        <li class="sub-menu-item">
+                                            <a href="order-tracking.html" class="">
+                                                <div class="text">Order tracking</div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
 {#                                {{-- user_nav --}}#}
                                 <li class="menu-item">
                                     <a href="{{ url_for('admin_user') }}"
@@ -130,11 +148,11 @@
                                             id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
                                             <span class="header-user wg-user">
                                                 <span class="image">
-                                                    <img src="/static/admin/images/avatar/user-1.png" alt="">
+                                                    <img src="/static/uploads/{{ user.image }}" alt="">
                                                 </span>
                                                 <span class="flex flex-column">
 {#                                                    {{-- user_name --}}#}
-                                                    <span class="body-title mb-2" style="font-size: 15px;">David</span>
+                                                    <span class="body-title mb-2" style="font-size: 15px;">{{ user.username }}</span>
 {#                                                    {{-- UserRole --}}#}
                                                     <span class="text-tiny">Admin</span>
                                                 </span>
@@ -151,7 +169,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="#" class="user-item" onclick="LogoutUser()">
+                                                <a href="{{ url_for('logout') }}" class="user-item">
                                                     <div class="icon">
                                                         <i class="icon-log-out"></i>
                                                     </div>

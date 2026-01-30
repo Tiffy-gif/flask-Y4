@@ -47,7 +47,7 @@
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Images</th>
-                                    <th class="text-center">Total Orders</th>
+                                    <th class="text-center">Role</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -67,8 +67,9 @@
                                             <span>No image</span>
                                         {% endif %}
                                     </td>
+                                    <td class="text-center">{{ user.role }}</td>
 
-                                    <td class="text-center"><a href="#" target="_blank">0</a></td>
+
                                     <td>
                                         <div class="list-icon-function">
                                             <a href="{{ url_for('form_user_edit', user_id=user.id, status='edit' ) }}">

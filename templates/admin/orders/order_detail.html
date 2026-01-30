@@ -1,1 +1,218 @@
 {% extends 'admin_layout.html' %}
+{% block content %}
+<div class="main-content-inner">
+    <div class="main-content-wrap">
+        <div class="flex items-center flex-wrap justify-between gap20 mb-27">
+            <h3>Order Details #{{ order.id }}</h3>
+            <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
+                <li><a href="{{ url_for('admin_dashboard') }}"><div class="text-tiny">Dashboard</div></a></li>
+                <li><i class="icon-chevron-right"></i></li>
+                <li><a href="{{ url_for('admin_orders') }}"><div class="text-tiny">Orders</div></a></li>
+                <li><i class="icon-chevron-right"></i></li>
+                <li><div class="text-tiny">Order #{{ order.id }}</div></li>
+            </ul>
+        </div>
+
+        <!-- Order Status Update -->
+        <div class="wg-box mb-3">
+            <div class="flex items-center justify-between gap10 flex-wrap">
+                <h5>Order Status</h5>
+                <form method="POST" action="{{ url_for('update_order_status', order_id=order.id) }}" class="d-flex gap-2">
+                    <select name="status" class="form-control" style="width: 200px;">
+                        <option value="pending" {{ 'selected' if order.status == 'pending' else '' }}>Pending</option>
+                        <option value="processing" {{ 'selected' if order.status == 'processing' else '' }}>Processing</option>
+                        <option value="shipped" {{ 'selected' if order.status == 'shipped' else '' }}>Shipped</option>
+                        <option value="delivered" {{ 'selected' if order.status == 'delivered' else '' }}>Delivered</option>
+                        <option value="cancelled" {{ 'selected' if order.status == 'cancelled' else '' }}>Cancelled</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Update Status</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Order Items -->
+        <div class="wg-box">
+            <div class="flex items-center justify-between gap10 flex-wrap mb-3">
+                <h5>Ordered Items</h5>
+                <a class="btn btn-secondary" href="{{ url_for('admin_orders') }}">← Back to Orders</a>
+            </div>
+            <div class="table-responsive">
+                {% if order.order_items %}
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th class="text-center">Price</th>
+                            <th class="text-center">Quantity</th>
+                            <th class="text-center">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order.order_items %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    {% if item.product and item.product.image %}
+                                    <img src="{{ url_for('static', filename='product_upload/' ~ item.product.image) }}"
+                                         alt="{{ item.product_name }}"
+                                         style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
+                                    {% endif %}
+                                    <span>{{ item.product_name }}</span>
+                                </div>
+                            </td>
+                            <td class="text-center">${{ "{:,.2f}".format(item.product_price) }}</td>
+                            <td class="text-center">{{ item.quantity }}</td>
+                            <td class="text-center"><strong>${{ "{:,.2f}".format(item.subtotal) }}</strong></td>
+                        </tr>
+                        {% endfor %}
+                        <tr class="table-info">
+                            <td colspan="3" class="text-right"><strong>Total Amount:</strong></td>
+                            <td class="text-center"><strong>${{ "{:,.2f}".format(order.total_amount) }}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="alert alert-warning">
+                    No items found for this order.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Customer Information -->
+        <div class="wg-box mt-4">
+            <h5>Customer Information</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th width="40%">Customer Name:</th>
+                            <td>{{ order.name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td>{{ order.email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Phone:</th>
+                            <td>{{ order.phone }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th width="40%">Order Date:</th>
+                            <td>{{ order.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Last Updated:</th>
+                            <td>{{ order.updated_at.strftime('%Y-%m-%d %H:%M:%S') if order.updated_at else 'N/A' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status:</th>
+                            <td>
+                                <span class="badge badge-{{ 'success' if order.status == 'delivered' else 'warning' if order.status == 'pending' else 'info' if order.status == 'processing' else 'primary' if order.status == 'shipped' else 'danger' }}">
+                                    {{ order.status|upper }}
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shipping Address -->
+        <div class="wg-box mt-4">
+            <h5>Shipping Address</h5>
+            <div class="my-account__address-item">
+                <div class="my-account__address-item__detail">
+                    <p><strong>{{ order.name }}</strong></p>
+                    <p>House No: {{ order.house }}</p>
+                    <p>Street No: {{ order.street }}</p>
+                    <p>Area: {{ order.area }}</p>
+                    <br>
+                    <p><strong>Contact:</strong> {{ order.phone }}</p>
+                    <p><strong>Email:</strong> {{ order.email }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="wg-box mt-4">
+            <h5>Order Summary</h5>
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th width="70%">Subtotal:</th>
+                        <td class="text-right">${{ "{:,.2f}".format(order.total_amount) }}</td>
+                    </tr>
+                    <tr>
+                        <th>Delivery Fee:</th>
+                        <td class="text-right">Free</td>
+                    </tr>
+                    <tr class="table-success">
+                        <th><strong>Total Amount:</strong></th>
+                        <td class="text-right"><strong>${{ "{:,.2f}".format(order.total_amount) }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Payment Method:</th>
+                        <td class="text-right">Cash on Delivery</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="wg-box mt-4">
+            <div class="d-flex gap-2">
+                <a href="{{ url_for('admin_orders') }}" class="btn btn-secondary">← Back to Orders</a>
+                <form method="POST" action="{{ url_for('delete_order', order_id=order.id) }}"
+                      onsubmit="return confirm('Are you sure you want to delete this order?');"
+                      style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Delete Order</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .badge {
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: bold;
+    }
+    .badge-success { background-color: #28a745; color: white; }
+    .badge-warning { background-color: #ffc107; color: black; }
+    .badge-info { background-color: #17a2b8; color: white; }
+    .badge-primary { background-color: #007bff; color: white; }
+    .badge-danger { background-color: #dc3545; color: white; }
+
+    .d-flex { display: flex; }
+    .gap-2 { gap: 10px; }
+    .align-items-center { align-items: center; }
+
+    .form-control {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-primary { background-color: #007bff; color: white; }
+    .btn-secondary { background-color: #6c757d; color: white; }
+    .btn-danger { background-color: #dc3545; color: white; }
+
+    .btn:hover { opacity: 0.9; }
+</style>
+{% endblock %}

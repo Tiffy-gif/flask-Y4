@@ -29,20 +29,33 @@
                 </div>
                 <!-- new-category -->
                 <div class="wg-box">
-                    <form class="form-new-product form-style-1" action="{{ url_for('category_create') if status == 'add' else url_for('category_edit') }}" method="POST"
-                        enctype="multipart/form-data">
-                        <fieldset class="name">
-                            <div class="body-title">Category Name <span class="tf-color-1">*</span>
-                            </div>
-                            <input class="flex-grow" type="text" placeholder="Category name" name="name"
-                                tabindex="0" value="{{ category.name if status == 'edit' }}" aria-required="true" required="">
-                        </fieldset>
+                <form class="form-new-product form-style-1"
+                      action="{{ url_for('category_create') if status == 'add' else url_for('category_edit') }}"
+                      method="POST"
+                      enctype="multipart/form-data">
 
-                        <div class="bot">
-                            <div></div>
-                            <button class="tf-button w208" type="submit">Save</button>
+                    {% if status == 'edit' %}
+                        <input type="hidden" name="category_id" value="{{ category.id }}">
+                    {% endif %}
+
+                    <fieldset class="name">
+                        <div class="body-title">
+                            Category Name <span class="tf-color-1">*</span>
                         </div>
-                    </form>
+                        <input class="flex-grow"
+                               type="text"
+                               placeholder="Category name"
+                               name="name"
+                               value="{{ category.name if status == 'edit' else '' }}"
+                               required>
+                    </fieldset>
+
+                    <div class="bot">
+                        <button class="tf-button w208" type="submit">Save</button>
+                        <a href="{{ url_for('admin_category') }}" class="tf-button w208">Back</a>
+                    </div>
+                </form>
+
                 </div>
             </div>
         </div>

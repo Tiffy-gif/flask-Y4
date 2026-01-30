@@ -409,12 +409,35 @@
 
         </div>
         <div class="header-tools d-flex align-items-center">
-          <a href="/login" class="header-tools__item">
-              <svg class="d-block" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <use href="#icon_user" />
-              </svg>
-          </a>
+          {% if user %}
+                <div class="header-tools__item dropdown">
+                    <a href="#" class="header-tools__item" data-bs-toggle="dropdown" aria-expanded="false">
+                        {% if user.image %}
+                            <img src="{{ url_for('static', filename='uploads/' + user.image) }}"
+                                 alt="User"
+                                 style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; display: block;">
+                        {% else %}
+                            <svg class="d-block" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <use href="#icon_user" />
+                            </svg>
+                        {% endif %}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><span class="dropdown-item-text"><strong>{{ user.username }}</strong></span></li>
+                        <li><hr class="dropdown-divider"></li>
+                        {% if user.role == 'admin' %}
+                            <li><a class="dropdown-item" href="{{ url_for('admin_dashboard') }}">Admin Panel</a></li>
+                        {% endif %}
+                        <li><a class="dropdown-item" href="{{ url_for('logout') }}" style="color: red;">Logout</a></li>
+                    </ul>
+                </div>
+            {% else %}
+                <a href="{{ url_for('login_page') }}" class="header-tools__item">
+                    <svg class="d-block" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <use href="#icon_user" />
+                    </svg>
+                </a>
+            {% endif %}
           <a href="/cart" class="header-tools__item header-tools__cart">
             <svg class="d-block" width="20" height="20" viewBox="0 0 20 20" fill="none"
               xmlns="http://www.w3.org/2000/svg">

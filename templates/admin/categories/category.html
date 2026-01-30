@@ -32,7 +32,7 @@
                         </div>
                     </form>
                 </div>
-                <a class="tf-button style-1 w208" href="add-category.html"><i
+                <a class="tf-button style-1 w208" href="{{ url_for('form_category_add') }}"><i
                         class="icon-plus"></i>Add new</a>
             </div>
             <div class="wg-table table-all-user">
@@ -53,7 +53,7 @@
                             <td>{{ category.products | length }}</td>
                             <td>
                                 <div class="list-icon-function">
-                                    <a href="{{ url_for('form_category_edit', category_id=category.id) }}">
+                                    <a href="{{ url_for('form_category_edit', category_id=category.id, status='edit') }}">
                                         <div class="item edit">
                                             <i class="icon-edit-3"></i>
                                         </div>

@@ -11,7 +11,14 @@ import os
 def admin_user():
     model = 'user'
     users = User.query.all()
-    return render_template('admin/users/users.html', model=model,users=users)
+
+    # 1. You need to identify the current logged-in user.
+    # For example, if you store the user_id in the session:
+    current_user_id = session.get('user_id')
+    current_admin = User.query.get(current_user_id)
+
+    # 2. Pass 'user' to the template so admin_layout.html can find it
+    return render_template('admin/users/users.html', users=users, user=current_admin, model=model)
 
 
 @app.get('/form/users/create')
@@ -64,7 +71,7 @@ def user_create():
     db.session.add(user)
     db.session.commit()
 
-    return redirect(url_for('admin_user'))
+    return redirect(url_for('login_page'))
 
 
 
@@ -79,6 +86,7 @@ def user_edit():
         user.email = form.get('email') or user.email
         user.phone = form.get('phone') or user.phone
         user.role = form.get('role') or user.role
+
 
 
         # Handle image uploads
@@ -103,3 +111,17 @@ def user_delete():
         db.session.commit()
 
     return redirect(url_for('admin_user'))
+
+
+
+
+
+
+
+@app.context_processor
+def inject_user():
+    user_id = session.get('user_id')
+    if user_id:
+        db_user = User.query.get(user_id)
+        return dict(user=db_user) # This creates the 'user' variable for HTML
+    return dict(user=None)

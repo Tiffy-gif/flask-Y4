@@ -13,11 +13,11 @@ from routes.admin.user import *
 from routes.admin.products import *
 from routes.admin.category import *
 from routes.admin.auth import *
+from routes.admin.order import *
 
 # api
 from routes.api.branch import *
 from routes.api.user import *
-
 from routes.api.category import *
 from routes.api.product import *
 

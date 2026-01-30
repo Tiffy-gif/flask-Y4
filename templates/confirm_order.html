@@ -5,21 +5,21 @@
     <section class="shop-checkout container">
       <h2 class="page-title">Order Received</h2>
       <div class="checkout-steps">
-        <a href="cart.html" class="checkout-steps__item active">
+        <a href="/cart" class="checkout-steps__item active">
           <span class="checkout-steps__item-number">01</span>
           <span class="checkout-steps__item-title">
             <span>Shopping Bag</span>
             <em>Manage Your Items List</em>
           </span>
         </a>
-        <a href="checkout.html" class="checkout-steps__item active">
+        <a href="/checkout" class="checkout-steps__item active">
           <span class="checkout-steps__item-number">02</span>
           <span class="checkout-steps__item-title">
             <span>Shipping and Checkout</span>
             <em>Checkout Your Items List</em>
           </span>
         </a>
-        <a href="order-confirmation.html" class="checkout-steps__item active">
+        <a href="#" class="checkout-steps__item active">
           <span class="checkout-steps__item-number">03</span>
           <span class="checkout-steps__item-title">
             <span>Confirmation</span>
@@ -27,6 +27,7 @@
           </span>
         </a>
       </div>
+
       <div class="order-complete">
         <div class="order-complete__message">
           <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -36,24 +37,26 @@
           <h3>Your order is completed!</h3>
           <p>Thank you. Your order has been received.</p>
         </div>
+
         <div class="order-info">
           <div class="order-info__item">
             <label>Order Number</label>
-            <span id="order_number">13119</span>
+            <span id="order_number">{{ order_id if order_id else '---' }}</span>
           </div>
           <div class="order-info__item">
             <label>Date</label>
-            <span id="order_date">27/10/2023</span>
+            <span id="order_date"></span>
           </div>
           <div class="order-info__item">
             <label>Total</label>
-            <span id="label_subtotal">$81.40</span>
+            <span id="label_order_total">${{ '%.2f'|format(total) if total else '0.00' }}</span>
           </div>
           <div class="order-info__item">
-            <label>Paymetn Method</label>
-            <span>Cash</span>
+            <label>Payment Method</label>
+            <span>Cash on Delivery</span>
           </div>
         </div>
+
         <div class="checkout__totals-wrapper">
           <div class="checkout__totals">
             <h3>Order Details</h3>
@@ -65,93 +68,86 @@
                 </tr>
               </thead>
               <tbody id="main_item">
-                <tr>
-                  <td>
-                    Zessi Dresses x 2
-                  </td>
-                  <td>
-                    $32.50
-                  </td>
-                </tr>
+                <!-- Order items will be inserted here by JavaScript -->
               </tbody>
             </table>
             <table class="checkout-totals">
               <tbody>
                 <tr>
                   <th>SUBTOTAL</th>
-                  <td id="label_total_usd">$62.40</td>
+                  <td id="label_subtotal">$0.00</td>
                 </tr>
                 <tr>
                   <th>DELIVERY</th>
                   <td>Free Delivery</td>
                 </tr>
                 <tr>
-                  <th>TOTAL(KHR)</th>
-                  <td id="label_total_kh">$81.40</td>
+                  <th>TOTAL (KHR)</th>
+                  <td id="label_total_kh">៛0</td>
                 </tr>
                 <tr>
-                  <th>TOTAL(USD)</th>
-                  <td id="label_final_total">$81.40</td>
+                  <th>TOTAL (USD)</th>
+                  <td id="label_total_usd">$0.00</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-          <a href="/" class="btn btn-primary btn-checkout" id="finish-order-btn">Back</a>
+
+        <a href="/" class="btn btn-primary btn-checkout" id="finish-order-btn">Continue Shopping</a>
       </div>
     </section>
   </main>
 {% endblock %}
-{% block scriptBlock %}
-    <script>
-        let main_item = document.getElementById('main_item')
-        let carts = JSON.parse(localStorage.getItem('carts') ?? '[]')
-        let cart_item = ``
-        let total = 0
-        carts.forEach((item) => {
-            total += (item.price * item.qty)
-            cart_item += `
-              <tbody>
-                <tr>
-                  <td>
-                    ${item.name} x ${item.qty}
-                  </td>
-                  <td align="right">
-                    $${item.price * item.qty}
-                  </td>
-                </tr>
-              </tbody>
-            `
-        })
-        main_item.innerHTML = cart_item
-        document.getElementById('label_subtotal').innerHTML= `$${total.toFixed(2)}`
-        document.getElementById('label_total_usd').innerHTML = `$${total.toFixed(2)}`
-        document.getElementById('label_final_total').innerHTML = `$${total.toFixed(2)}`
-        document.getElementById('label_total_kh').innerHTML =  `៛${(total*4100).toLocaleString()}`
-        localStorage.setItem('carts', JSON.stringify(carts));
-        function getSysDateFormat(){
-            let currentdate = new  Date()
-            let year = currentdate.getFullYear()
-            let month = currentdate.getMonth() +1
-            let day = currentdate.getDate()
 
-            {#add zero to month and day if it have only one digit#}
-            let formatMonth = month < 10 ? '0' + month : month
-            let formatDay = day < 10 ? '0' + day : day
-            return `${formatDay}-${formatMonth}-${year}`
-        }
-        function getRandomOrderNumber(min, max) {
-          // Ensure min and max are integers
-          min = Math.ceil(min);
-          max = Math.floor(max);
-          // Generate a random number within the range [min, max]
-          return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-        const orderNumber = getRandomOrderNumber(100, 200);
-        document.getElementById('order_date').innerHTML = `${getSysDateFormat()}`
-        document.getElementById('order_number').innerHTML = `${orderNumber}`
-        document.getElementById('finish-order-btn').addEventListener('click' , function (){
-            localStorage.removeItem('carts')
-        })
-    </script>
+{% block scriptBlock %}
+<script>
+    // Get cart items from localStorage
+    let carts = JSON.parse(localStorage.getItem('carts') ?? '[]');
+
+    // Display order items
+    let main_item = document.getElementById('main_item');
+    let cart_item_html = '';
+    let total = 0;
+
+    carts.forEach((item) => {
+        const subtotal = item.price * item.qty;
+        total += subtotal;
+
+        cart_item_html += `
+            <tr>
+                <td>${item.name} x ${item.qty}</td>
+                <td align="right">$${subtotal.toFixed(2)}</td>
+            </tr>
+        `;
+    });
+
+    main_item.innerHTML = cart_item_html;
+
+    // Update totals
+    document.getElementById('label_subtotal').innerHTML = `$${total.toFixed(2)}`;
+    document.getElementById('label_total_usd').innerHTML = `$${total.toFixed(2)}`;
+    document.getElementById('label_total_kh').innerHTML = `៛${(total * 4100).toLocaleString()}`;
+
+    // Format and display current date
+    function getSysDateFormat() {
+        let currentdate = new Date();
+        let year = currentdate.getFullYear();
+        let month = currentdate.getMonth() + 1;
+        let day = currentdate.getDate();
+
+        // Add zero to month and day if it has only one digit
+        let formatMonth = month < 10 ? '0' + month : month;
+        let formatDay = day < 10 ? '0' + day : day;
+
+        return `${formatDay}/${formatMonth}/${year}`;
+    }
+
+    document.getElementById('order_date').innerHTML = getSysDateFormat();
+
+    // Clear cart when user finishes
+    document.getElementById('finish-order-btn').addEventListener('click', function() {
+        localStorage.removeItem('carts');
+    });
+</script>
 {% endblock %}

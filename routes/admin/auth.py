@@ -18,6 +18,7 @@ def do_login():
     user = User.query.filter_by(username=username).first()
 
     if not user:
+
         flash('Invalid username or password', 'danger')
         return redirect(url_for('login_page'))
 
@@ -30,10 +31,11 @@ def do_login():
         session['user_id'] = user.id
         session['username'] = user.username
         session['role'] = user.role
-        session['user_image'] = user.image  # Store user image for display
-        session.permanent = True
+        session['user_image'] = user.image
+        # session.permanent = True
 
         if user.role == 'admin' or user.username == 'admin':
+
             return redirect(url_for('admin_dashboard'))
         else:
             flash(f'Welcome back, {user.username}!', 'success')

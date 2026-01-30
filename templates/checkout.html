@@ -19,62 +19,60 @@
             <em>Checkout Your Items List</em>
           </span>
         </a>
-
       </div>
-      <form  action="/confirm" method="post">
+
+      <form action="/confirm" method="post" id="checkout-form">
         <div class="checkout-form">
           <div class="billing-info__wrapper">
             <div class="row">
               <div class="col-6">
                 <h4>SHIPPING DETAILS</h4>
               </div>
-              <div class="col-6">
-              </div>
             </div>
 
             <div class="row mt-5">
               <div class="col-md-6">
-                <div class="form-floating my-3">
-                  <input type="text" class="form-control" name="name" id="name" required>
-                  <label for="name">Full Name *</label>
-                  <span class="text-danger"></span>
+                  <div class="form-floating my-3">
+                    <input type="text" class="form-control" name="name" id="name"
+                           value="{{ user.username if user else '' }}" readonly required>
+                    <label for="name">Full Name *</label>
+                  </div>
                 </div>
-              </div>
               <div class="col-md-6">
-                <div class="form-floating my-3">
-                  <input type="text" class="form-control" name="phone" required>
-                  <label for="phone">Phone Number *</label>
-                  <span class="text-danger"></span>
-                </div>
+              <div class="form-floating my-3">
+                <input type="text" class="form-control" name="phone" id="phone"
+                       value="{{ user.phone if user else '' }}" readonly required>
+                <label for="phone">Phone Number *</label>
               </div>
+            </div>
               <div class="col-md-4">
                 <div class="form-floating my-3">
-                  <input type="text" class="form-control" name="house" required>
-                  <label for="house"> HouserNo. *</label>
-                  <span class="text-danger"></span>
+                  <input type="text" class="form-control" name="house" id="house" required>
+                  <label for="house">House No. *</label>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="form-floating mt-3 mb-3">
-                  <input type="text" class="form-control" name="street" required>
-                  <label for="street">StreetNo. *</label>
-                  <span class="text-danger"></span>
+                  <input type="text" class="form-control" name="street" id="street" required>
+                  <label for="street">Street No. *</label>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="form-floating my-3">
-                  <input type="text" class="form-control" name="area" required>
+                  <input type="text" class="form-control" name="area" id="area"  required>
                   <label for="area">Area Name *</label>
                 </div>
               </div>
               <div class="col-md-12">
                 <div class="form-floating my-3">
-                  <input required type="email" class="form-control" name="email" >
+                  <input type="email" class="form-control" name="email" id="email"
+                         value="{{ user.email if user else '' }}" readonly required>
                   <label for="email">Email *</label>
                 </div>
               </div>
             </div>
           </div>
+
           <div class="checkout__totals-wrapper">
             <div class="sticky-content">
               <div class="checkout__totals">
@@ -88,85 +86,92 @@
                     </tr>
                   </thead>
                   <tbody id="main_item">
-                    <tr>
-                      <td>
-                        Zessi Dresses x 2
-                      </td>
-                      <td>
-                         x 2
-                      </td>
-                      <td align="right">
-                        $32.50
-                      </td>
-                    </tr>
-
+                    <!-- Cart items will be inserted here by JavaScript -->
                   </tbody>
                 </table>
                 <table class="checkout-totals">
                   <tbody>
                     <tr>
                       <th>SUBTOTAL</th>
-                      <td align="right" id="label_subtotal">$62.40</td>
+                      <td align="right" id="label_subtotal">$0.00</td>
                     </tr>
                     <tr>
                       <th>DELIVERY</th>
                       <td align="right">Free Delivery</td>
                     </tr>
-
                     <tr>
-                      <th>TOTAL(KHR)</th>
-                      <td align="right" id="label_total_kh">$81.40</td>
+                      <th>TOTAL (KHR)</th>
+                      <td align="right" id="label_total_kh">៛0</td>
                     </tr>
                     <tr>
-                      <th>TOTAL(USD)</th>
-                      <td align="right" id="label_total_usd">$81.40</td>
+                      <th>TOTAL (USD)</th>
+                      <td align="right" id="label_total_usd">$0.00</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
-              <div class="mobile_fixed-btn_wrapper" >
-                  <div class="button-wrapper container" >
-                      <button class="btn btn-primary btn-checkout">PLACE ORDER</button>
-                  </div>
+              <div class="mobile_fixed-btn_wrapper">
+                <div class="button-wrapper container">
+                  <button type="submit" class="btn btn-primary btn-checkout">PLACE ORDER</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-          <input type="hidden" id="cart-item" name="cart-item">
+
+        <!-- Hidden input to store cart items as JSON -->
+        <input type="hidden" id="cart-item" name="cart-item">
       </form>
     </section>
   </main>
 {% endblock %}
-{% block scriptBlock %}
-    <script>
-        let main_item = document.getElementById('main_item')
-        let carts = JSON.parse(localStorage.getItem('carts') ?? '[]')
-        document.getElementById('cart-item').value = JSON.stringify(carts)
-        let cart_item = ``
-        let total = 0
-        carts.forEach((item) => {
-            total += (item.price * item.qty)
-            cart_item += `
-              <tbody>
-                <tr>
-                  <td>
-                    ${item.name}
-                  </td>
-                  <td>
-                     x ${item.qty}
-                  </td>
-                  <td align="right">
-                    $${item.price * item.qty}
-                  </td>
-                </tr>
-              </tbody>
-            `
-        })
-        main_item.innerHTML = cart_item
-        document.getElementById('label_subtotal').innerHTML= `$${total.toFixed(2)}`
-        document.getElementById('label_total_usd').innerHTML = `$${total.toFixed(2)}`
-        document.getElementById('label_total_kh').innerHTML =  `៛${(total*4100).toLocaleString()}`
 
-        localStorage.setItem('carts', JSON.stringify(carts));
-    </script>
+{% block scriptBlock %}
+<script>
+    // Get cart items from localStorage
+    let carts = JSON.parse(localStorage.getItem('carts') ?? '[]');
+
+    // Check if cart is empty
+    if (carts.length === 0) {
+        alert('Your cart is empty!');
+        window.location.href = '/';
+    }
+
+    // Store cart items in hidden input for form submission
+    document.getElementById('cart-item').value = JSON.stringify(carts);
+
+    // Display cart items
+    let main_item = document.getElementById('main_item');
+    let cart_item_html = '';
+    let total = 0;
+
+    carts.forEach((item) => {
+        const subtotal = item.price * item.qty;
+        total += subtotal;
+
+        cart_item_html += `
+            <tr>
+                <td>${item.name}</td>
+                <td>x ${item.qty}</td>
+                <td align="right">$${subtotal.toFixed(2)}</td>
+            </tr>
+        `;
+    });
+
+    main_item.innerHTML = cart_item_html;
+
+    // Update totals
+    document.getElementById('label_subtotal').innerHTML = `$${total.toFixed(2)}`;
+    document.getElementById('label_total_usd').innerHTML = `$${total.toFixed(2)}`;
+    document.getElementById('label_total_kh').innerHTML = `៛${(total * 4100).toLocaleString()}`;
+
+    // Form validation before submit
+    document.getElementById('checkout-form').addEventListener('submit', function(e) {
+        if (carts.length === 0) {
+            e.preventDefault();
+            alert('Your cart is empty!');
+            return false;
+        }
+    });
+</script>
 {% endblock %}

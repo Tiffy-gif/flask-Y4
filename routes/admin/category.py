@@ -1,6 +1,6 @@
 from werkzeug.utils import secure_filename
 from app import app , db, render_template
-from flask import request, redirect, url_for
+from flask import request, redirect, url_for, session, flash
 from models import Category
 import os
 
@@ -22,15 +22,15 @@ def form_category_add():
 @app.get('/form/category/edit')
 def form_category_edit():
     model = 'form_category_edit'
-    status = request.args.get('status')
+    category_id = request.args.get('category_id')
     category = None
-    if status == 'edit':
-        category_id = int(request.args.get('category_id'))
+
+    if category_id:
         category = Category.query.get(category_id)
 
         # assert False, category
 
-    return render_template('admin/categories/category_edit.html', model=model, status=status, category=category)
+    return render_template('admin/categories/category_edit.html', model=model, status='edit', category=category)
 
 
 @app.get('/form/category/delete')
@@ -68,21 +68,16 @@ def category_create():
 @app.post('/category/edit')
 def category_edit():
     category_id = request.form.get('category_id')
-    category = Category.query.get(category_id)
 
-    if category:
-        category.name = form.get('name') or category.name
-        db.session.commit()
+    if not category_id:
+        flash('Invalid category', 'error')
+        return redirect(url_for('admin_category'))
 
+    category = Category.query.get_or_404(category_id)
+    category.name = request.form.get('name')
+    db.session.commit()
+
+    flash('Category updated successfully', 'success')
     return redirect(url_for('admin_category'))
 
 
-@app.post('/category/delete')
-def category_delete():
-    category_id = request.form.get('category_id')
-    category = Category.query.get(category_id)
-    if category:
-        db.session.delete(category)
-        db.session.commit()
-
-    return redirect(url_for('admin_category'))
