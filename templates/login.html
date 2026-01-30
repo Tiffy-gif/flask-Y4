@@ -74,6 +74,9 @@
 </main>
 
 <script>
+    // Get URL parameters once at the top
+    const urlParams = new URLSearchParams(window.location.search);
+
     // Auto-dismiss flash messages after 7 seconds
     setTimeout(function() {
         const flashAlert = document.getElementById('flashAlert');
@@ -85,8 +88,14 @@
         }
     }, 7000);
 
+    // Clear cart when user logs out
+    if (urlParams.get('logout') === 'true') {
+        localStorage.removeItem('carts');
+        // Clean up the URL
+        window.history.replaceState({}, '', '/login');
+    }
+
     // Add shake animation to form on error
-    const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('error')) {
         const formContainer = document.getElementById('loginFormContainer');
         if (formContainer) {

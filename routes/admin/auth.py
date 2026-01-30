@@ -47,4 +47,4 @@ def logout():
     username = session.get('username', 'User')
     session.clear()
     flash(f'Goodbye, {username}! You have been logged out successfully', 'success')
-    return redirect(url_for('login_page'))
+    return redirect(url_for('login_page') + '?logout=true')

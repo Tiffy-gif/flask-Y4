@@ -3,7 +3,7 @@ from datetime import datetime
 from fun_tele import sendMessage
 from app import app, db, mail
 from flask_mail import Message
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, session, flash
 from tabulate import tabulate
 
 from models import Order, OrderItem, Product
@@ -11,6 +11,9 @@ from models import Order, OrderItem, Product
 
 @app.route('/checkout')
 def checkout():
+    if 'user_id' not in session:
+        flash('Please login to checkout')
+        return redirect(url_for('login_page'))
     return render_template('checkout.html')
 
 

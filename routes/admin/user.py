@@ -63,7 +63,7 @@ def user_create():
         username=form.get('username'),
         email=form.get('email'),
         phone=form.get('phone'),
-        role=form.get('role'),
+        role='customer',
         password=generate_password_hash(form.get('password')),
         image=filename
     )
